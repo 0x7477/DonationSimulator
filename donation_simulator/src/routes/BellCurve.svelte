@@ -5,7 +5,7 @@
 	import { scaleLinear } from 'd3-scale';
 	import { line, curveBasis } from 'd3-shape';
 
-    import data from '$lib/ts/bell_curve_data';
+    import data from '$lib/ts/data/bell_curve_data';
 
     export let percent: [number, number] = [0.4,0.6];
 

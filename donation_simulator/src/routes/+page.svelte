@@ -8,7 +8,4 @@
 	<meta name="description" content="A Donation Simulator" />
 </svelte:head>
 
-<span>Hi This is a Donation Simulator</span>
 <Simulator/>
-<style>
-</style>

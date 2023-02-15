@@ -45,13 +45,11 @@ Um das Modell aufbauen zu können brauchen wir Axiome und Daten. Zum Beispiel h�
 Für das Projekt wurden verschiedene Quellen benutzt. Aus diesen Daten werden dann anschließend Modelle aufgebaut:
 
 ### Die Vermögensverteilung
-Zur Bestimmung wie viel Geld eine zu simulierende Person hat wurde die Vermögensverteilung der Deutschen benutzt und auf das Gesamtvermögen deutscher privater Haushalte verteilt
-
-Ein Modell dafür wurde mit GeoGebra erstellt:
-![img](img/wealth.png)
-
-### Das Donation SHare Modell
-Wie viel von dem Geld wird auh gespendet
+Zur Bestimmung wie viel Geld eine zu simulierende Person hat
+### Das Donation Modell
+Ob diese Person überhaupt Geld spendet
+### Das Donation Share Modell
+Wie viel von dem Geld wird auch gespendet
 
 ### Das Popularitätsmodell
 Hier wird die Popularität der Menschen geschätzt.
@@ -70,7 +68,6 @@ Dazu habe ich folgende Angaben gefunden:
 
 Ein Modell dafür wurde mit GeoGebra erstellt:
 ![img](img/follower.png)
-
 
 ### Die Riskoverteilung
 Es gibt keine wirkliche Metrik für Risko, daher benutzen wir eine einfach Standardverteilung.

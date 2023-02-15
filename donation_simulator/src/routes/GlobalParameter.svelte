@@ -6,7 +6,7 @@
 </script>
 
 <div>
-	<h2>GlobalParameter</h2>
+	<h1>GlobalParameter</h1>
 
     <PercentSlider
     label_text="Percent of interesting charities to each person"
@@ -27,10 +27,30 @@
     />
 
     <PercentSlider
-    label_text="Percent of friends each person can recruit"
+    label_text="Percent of follower each person can recruit"
     bind:param={params.conversion_rate_estimate}
     />
 
+    <div class="setting">
+        <label for="slider">Amount of friends each person has on average: {params.average_number_of_friends_one_would_ask_to_donate}</label>
+        <input
+            type="range"
+            min={0}
+            max={50}
+            step={1}
+            id="slider"
+            bind:value={params.average_number_of_friends_one_would_ask_to_donate}
+        />
+    </div>
 
-	<!-- {(console.log(params), '')} -->
+
 </div>
+
+
+
+<style>
+	.setting {
+		display: flex;
+		flex-direction: column;
+	}
+</style>

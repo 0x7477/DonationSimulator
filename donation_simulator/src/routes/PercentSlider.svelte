@@ -6,6 +6,8 @@
 	export let on_change:() => void = () => {};
 	export let hide_percent:boolean = false;
 
+	export let min:number = 0 
+	export let max:number = 1 
 	let res:[number] = [param];
 </script>
 
@@ -22,8 +24,8 @@
 	<slot></slot>
 	<input
 		type="range"
-		min={0}
-		max={1}
+		{min}
+		{max}
 		step={0.001}
 		id="slider"
 		bind:value={param}

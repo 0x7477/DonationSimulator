@@ -1,4 +1,6 @@
 <script>
+	import '../app.postcss';
+	import '../app.postcss';
 	import './styles.css';
 </script>
 

@@ -1,5 +1,5 @@
-import type { Donator } from "./donator";
-import { Statistics } from "./statistics";
+import type { Donator } from "./donator.js";
+import { Statistics } from "./statistics.js";
 export class Charity
 {
     public constructor(
