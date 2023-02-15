@@ -6,19 +6,11 @@
 	import { Parameter } from '$lib/ts/parameter';
 	import { Donator } from '$lib/ts/donator';
 	import type { DonatorDataPoint } from '$lib/ts/donator_info';
-
-	import { DonatorShareEstimator } from '$lib/ts/estimators/donator_share_estimator';
-	import { DonatorDoesDonateEstimator } from '$lib/ts/estimators/donator_does_donate_estimator';
-	import { DonatorIncomeEstimator } from '$lib/ts/estimators/income_estimator';
 	import ScatterPlot from './ScatterPlot.svelte';
-
-	// import { Tabs, Tab, TabList, TabPanel } from 'svelte-tabs';
 
 	import { Tabs, TabItem } from 'flowbite-svelte';
 
 	let params = new Parameter();
-    // let charity = new Charity("Charity 1",0.5,0,false,false,false,0,0,0,0);
-    // let charity2 = new Charity("Charity 2",0.5,0,false,false,false,0,0,0,0);
 
 	let charities:Charity[] = [];
 	let data:DonatorDataPoint[][] = [];
@@ -27,6 +19,13 @@
 	let x_index:number;
 
 	addCharity();
+
+	function removeCharity()
+	{
+		charities.pop();
+		amount_of_charities-=1;
+		charities = charities;
+	}
 
 	function addCharity()
 	{
@@ -41,16 +40,22 @@
 		for(var c = 0; c < charities.length; c++)
 		{
 			data.push([]);
-			for(var i = 0; i < 100; i++)
+			charities[c].total_donations = 0;
+
+			for(var i = 0; i < params.number_of_simulations; i++)
 			{
 				let donator = new Donator(params);
 				var dp = donator.getDataPoint(charities[c]);
 				if(dp.data[5] == 0) continue;
+
+				charities[c].total_donations += dp.data[5];
 				data[c].push(dp);
 
-				if(dp.data[0] < dp.data[5])
-					console.log(donator,dp.data[5]);
+				// if(dp.data[0] < dp.data[5])
+				// 	console.log(donator,dp.data[5]);
 			}
+
+			console.log(charities[c].name, charities[c].total_donations,charities[c].total_donations / params.number_of_simulations);
 		}
 
 		data= data;
@@ -66,32 +71,28 @@
 		</div>
 		<div>
 			<h1>CharityParameter</h1>
-			<Tabs style="pill">
-				{#each charities as c}
-				<TabItem title={c.name}>
-					<CharityParameter bind:params={params} bind:charity={c}/>
-				</TabItem>
-				  					{/each}
-				
-<!-- 
-				{#each charities as c}
-				{/each} -->
-								<!-- {#each charities as c}
-					<Tabs.Tab label={c.name}>
-					</Tabs.Tab>
-				{/each} -->
-<!-- 
-				{#each Array(amount_of_charities) as _, i}
-					<Tabs.Tab label="a">a</Tabs.Tab>
-				{/each} -->
-
-			</Tabs>
+			<div id="charity_params">
+				{#if amount_of_charities > 0}
+				<Tabs>
+					{#each charities as c,i}
+					<TabItem title={c.name} open={i==0}>
+						<CharityParameter bind:params={params} bind:charity={c}/>
+					</TabItem>
+					{/each}		
+				</Tabs>
+				{/if}
+			</div>
 		</div>
 	</div>
 	<hr>
 
-	<input type="button" on:click={simulate} value="simulate">
-	<input type="button" on:click={addCharity} value="add charity">
+	<div id="control">
+		<input type="button" on:click={simulate} value="simulate">
+		<input type="button" on:click={addCharity} value="add charity">
+		<input type="button" on:click={removeCharity} value="remove charity">
+
+	</div>
+	<div id="plot">
 
 	<select bind:value={shown_charity}>
 		{#each charities as c,i}
@@ -107,7 +108,8 @@
 		<option value="4">popularity</option>
 	</select>
 
-	<!-- <ScatterPlot {x_index} data={data[shown_charity]}/> -->
+	<ScatterPlot {x_index} data={data[shown_charity]}/>
+	</div>
 </div>
 
 <style>
@@ -117,10 +119,22 @@
 		flex-wrap: wrap;
 	}
 
-	#ParameterContainer *
+	#ParameterContainer div
 	{
 		flex:1;
 		min-width: 600px;
+		margin: 1em;
 	}
+
+	#control
+	{
+		margin: 1em;
+	}
+
+	#plot
+	{
+		margin: 0 1em 0 1em;
+	}
+
 
 </style>
