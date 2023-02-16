@@ -199,7 +199,8 @@ und lässt sich wahrscheinlich besser mit Machine-Learning Allgorithmen ausführ
 Formeln, da die Reduktion von Menschlichem Verhalten auf 5 Parameter etwas Unerkomplex ist. Parameter
 wie Geschlecht, Alter, soziales Umfeld, Bildungsstand, Religion etc. werden nicht berücksichtigt 
 obwohl sie sehr großen Einfluss auf das Spendeverhalten besitzen. Und auch die Quellen für das 
-Popularitätmodell sind höchst fragwürdig. Auch die Höhe der Spenden ist nicht wirklich repräsentativ. 
+Popularitätmodell sind höchst fragwürdig. Auch das Einkommensmodell ist nicht allzu präzise, vorallem im Bereich hoher Gehälter.
+Desweiteren ist die Höhe der Spenden nicht wirklich repräsentativ. 
 Dadurch, dass die Anzahl der Simualationen einstellbar ist, ist die Höhe der Spenden in absoluten 
 Zahlen natürlich willkürlich, es lassen sich aber durchaus relative Unterschiede und Tendenzen feststellen. 
 
