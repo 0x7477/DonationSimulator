@@ -70,6 +70,8 @@ export class Donator
 
     private doesAdvertiseCharity(charity: Charity)
     {
+        if(this.popularity < 10) return false;
+
         var probability = (10*((1-this.getNormalizedInterestDifference(charity))-0.5)) * this.params.percent_of_people_advertising_after_donation;
 
         return Math.random() < probability;

@@ -9,7 +9,7 @@ Es soll ein Spende-Modell erstellt werden um verschiedene Methoden zur Donation-
 Zunächst stellt man sich folgende Fragen:
 
 ### Für wen ist das Projekt gedacht?
-Das Projekt ist für Leute gedacht, die die verschiedenen Methoden zur Donation-Incentivization (DI) noch nicht kennen oder solche System implementieren wollen und parametrisieren müssen.
+Das Projekt ist für Leute gedacht, die mit verschiedenen Methoden zur Donation-Incentivization (DI) experimentieren möchte oder solche System implementieren wollen und parametrisieren müssen.
 
 ### Wie viele Ressourcen stehen zur Verfügung?
 10-20 Stunden
@@ -52,25 +52,25 @@ Hierfür wurde nicht das Vermögen, sondern das Einkommen einer Person verwendet
 Die Idee dahinter ist, dass eine Person hauptsächlich Geldwerte spendet und Vermögen
 meistens nicht in Form von Geld, sondern Sachwerten vorliegt.
 
-Hierfür wurden die Daten von der ![Bundesbank](https://www.bundesbank.de/resource/blob/794130/d523cb34074622e1b4cfa729f12a1276/mL/2019-04-vermoegensbefragung-data.pdfs) verwendet.
+Hierfür wurden die Daten von der [Bundesbank](https://www.bundesbank.de/resource/blob/794130/d523cb34074622e1b4cfa729f12a1276/mL/2019-04-vermoegensbefragung-data.pdfs) verwendet.
 
 
 ### Das Donation Modell
 Anschließend brauche ich ein Modell, welches eine Aussage trifft, ob eine Person überhaupt spendet.
-Glücklicherweise hatte das statistische Bundesamt dazu Daten erhoben. ![destatis.de](https://www.destatis.de/DE/Methoden/WISTA-Wirtschaft-und-Statistik/2019/06/spendenbereitschaft-062019.pdf?__blob=publicationFile)
+Glücklicherweise hatte das statistische Bundesamt dazu Daten erhoben. [destatis.de](https://www.destatis.de/DE/Methoden/WISTA-Wirtschaft-und-Statistik/2019/06/spendenbereitschaft-062019.pdf?__blob=publicationFile)
 
 ### Das Donation Share Modell
 Wenn nun feststeht, dass eine Person spendet, ist es interessant zu wissen wie viel diese Person spendet.
-Dafür nutze ich die Daten von der ![Bundesbank](https://www.bundesbank.de/resource/blob/794130/d523cb34074622e1b4cfa729f12a1276/mL/2019-04-vermoegensbefragung-data.pdfs).
+Dafür nutze ich die Daten von der [Bundesbank](https://www.bundesbank.de/resource/blob/794130/d523cb34074622e1b4cfa729f12a1276/mL/2019-04-vermoegensbefragung-data.pdfs).
 
 ### Das Popularitätsmodell
 Um die DownstreamDistribution simulieren zu können brauchte ich anschließend Daten darüber
 wie viele Menschen jeder erreichen kann. Hierfür habe ich Leute in Freunde und Follower eingeteilt.
-Die Anzahl von Freunden ist bei allen Menschen nach ![PhD Robin Dunbar(https://ideas.ted.com/how-many-friends-do-most-people-dunbars-number/)
+Die Anzahl von Freunden ist bei allen Menschen nach [PhD Robin Dunbar](https://ideas.ted.com/how-many-friends-do-most-people-dunbars-number/)
 bei ungefähr 15. Wir gehen in dieser Modellierung davon aus, dass man Charities eher seinen engeren Freunden empfiehlt als weitgehendne Bekannten.
 
 Die Reichweite einer Person über social media dagegen ist etwas interessanter. Hierfür habe ich überraschend wenig Daten gefunden. 
-Eckdaten konnte ich aber bei - ![quore](https://www.quora.com/Are-there-any-analyses-of-user-distribution-by-follower-followee-numbers-on-sites-with-follower-graphs) und ![heepsy.com](https://blog.heepsy.com/posts/follower-distribution-on-instagram) finden.
+Eckdaten konnte ich aber bei - [quore](https://www.quora.com/Are-there-any-analyses-of-user-distribution-by-follower-followee-numbers-on-sites-with-follower-graphs) und [heepsy.com](https://blog.heepsy.com/posts/follower-distribution-on-instagram) finden.
 
 |Follower|Prozent die <= Follower haben
 |-|-|
@@ -97,3 +97,126 @@ Diese Menschen steigern in diesem Modell deshalb ihre Spendenhöhe.
 
 ### Das Empathiemodell
 In dem Modell wurde versucht die Empathie von Menschen einfließen zu lassen.
+Im Modell wird versucht darzustellen, dass manchen Menschen ein emotionaler Bezug zur
+Spendenaktion wichtig ist und auch honoriert wird. Zumindest schreibt [callhub.io](https://callhub.io/donation-incentives/)
+das diese Art der DI größtenteil besser funktioniert als monetäre DI. 
+
+## Umsetzung
+Nachdem die Modelle erstellt wurden ging es auch shcon mit der Umsetzung los.
+
+Zunächst eignete ich mir Svelte an. Folgende Ressourcen habe ich dabei verwendet:
+- [Svete in 100 Seconds - Fireship](https://www.youtube.com/watch?v=rv3Yq-B8qp4)
+- [Svelte 3 Reaction & QuickStart Tutorial - Fireship](https://www.youtube.com/watch?v=043h4ugAj4c)
+- [Svelte.dev](https://svelte.dev/tutorial)
+
+Nachdem ich das Projekt erstellt hatte begann ich damit die Simulation zu schreiben.
+Dafür erstellte ich erstmal die Donator Klasse, sowie die Generierung der einzelnen Attribute.
+Anschließend implementierte ich die Modelle. Zu Beginn probierte ich die Modelle mithilfe von Funktionen
+zu beschreiben, allerdings führte dies zu Unstetigkeiten, weshalb ich mich dazu entschied ausschließlich
+lineare Modelle zu benutzen, dafür aber diese direkt aus den Rohwerten zu ermitteln, sodass Nutzer diese
+einfach austauschen können oder eigene Modelle bauen können.
+
+Anschließend begann ich mit der Erstellung der Charities, sowie der Parameter. Glücklicherweise legt der
+Benutzer die Parameter der Charities fest, sodass hierfür keine Modelle benötigt wurden.
+
+Anschließend begann ich mit der Implementierung des Spendenvorganges.
+
+### Der Spendenvorgang
+
+Der Spendenvorgang ist hier einmal vereinfacht in einem Diagramm dargestellt.
+```mermaid
+%%{ init: { 'flowchart': { 'curve': 'linear' ,"defaultRenderer": "elk"} } }%%
+flowchart
+    subgraph S1[Spendet die Person überhaupt?]
+    <!-- direction TB -->
+    A1(Ist die Person pleite?) --> J1(JA)
+    A1 --> N1(NEIN) 
+    N1 --> A2(Spendet die Person prinzipiell?)
+    A2 --> N2(Nein)
+    A2 --> J2(Ja)
+    J2 --> A3(Kennt die Person die Charity?)
+    A3 --> N3(Nein)
+    A3 --> J3(Ja)
+    J3 --> A4(Interessiert die Person sich für die Charity)
+    A4 --> N4(Nein)
+    A4 --> J4(Ja)
+    J4 --> A5(Ist der Person die Spende zu riskant?)
+    A5 --> N5(Nein)
+    A5 --> J5(Ja)
+    end
+    subgraph S2[Wie viel Spendet die Person?]
+        <!-- direction TB -->
+        B1(Wie viel Spendet die Person im Durchschnitt?) --> B2
+        B2(Wie interessiert ist diese Person an der Charity?) --> B3
+        B3(Wie hoch wird die Person für ihre Spende kompensiert?) --> B4
+        B4(Wie hoch ist die Person bereit die Kompensation auszugleichen?) --> B5
+        B5(Wie hoch ist der emotionale Einfluss?) --> B6
+        B6(Wie viel Geld gibt die Charity der Person von ihrer Spende zurück?)
+    end
+    J5 --> S2
+    subgraph S3[Bewirbt die Person die Charity?]
+        <!-- direction TB -->
+        F1(Ist die Person bekannt genug?) --> J10(Ja) --> F2
+        F1 --> N10(Nein)
+        F2(Interessiert sich die Person genug?) --> N11(Nein)
+        F2 --> J11(Ja)
+    end
+        S2 --> S3
+    J11 --> |Freunde + Follower| S1
+
+```
+
+### Das Frontend
+
+Nachdem das Backend fertig implementiert war, wurde das Frontend aufgebaut.
+Die Konfiguration der Parameter wurde in zwei Komponenten ausgelagert (Global und Charity-Parameter).
+
+Anschließend wurden noch Diagramme hinzugefügt, die die Simulationserebnisse darstellen sollen. Einerseits 
+lassen sich die Spendenhöhen je nach Eigenschaftswert der Spender anzeigen lassen, aber auch ein Kreisdiagramm
+mit der Spendenverteilung vor und nach dem quadratic funding.
+
+### Modelltuning
+
+Natürlich waren die Ergebnisse des Modells nicht direkt zufriedenstellend. Ich erstellte Tests um die Axiome
+die ich zu Beginn aufgestellt habe zu überprüfen und simulierte verschiedene Charities um fehler in den Modellen
+zu erkennen.
+
+### Evaluation
+
+Aus den Simulationen lassen sich folgende Ergebnisse ziehen:
+- Quadratic Funding benachteiligt unbekanntere Charities
+- Quadratic Funding benachteiligt Charities, die wenig Leute kennen
+- Der Einsatz von monetären Geschenken hat kaum einen Einfluss auf die Spendenhöhe
+- Downline Distribution erhöht die Spendenbereitschaft, verringert aber die Anzahl der Spender
+
+## Kritik & Fazit
+
+Die Frage nach dem Spendenverhalten von Menschen ist eine sehr interessante Forschungsfrage.
+Leider ist sie auch sehr komplex und der Aufbau des Modells ist zwar faktengestützt so weit es 
+geht, basiert aber grundsätzlich auf der meiner persönlichen Vorstellung und hat daher keinen
+besonders starken Aussagewert. Jeder einzelne Teilschritt im Modell ist eine eigene Forschungsfrage
+und lässt sich wahrscheinlich besser mit Machine-Learning Allgorithmen ausführen, als mit diskreten
+Formeln, da die Reduktion von Menschlichem Verhalten auf 5 Parameter etwas Unerkomplex ist. Parameter
+wie Geschlecht, Alter, soziales Umfeld, Bildungsstand, Religion etc. werden nicht berücksichtigt 
+obwohl sie sehr großen Einfluss auf das Spendeverhalten besitzen. Auch die Höhe der Spenden ist 
+nicht wirklich repräsentativ. Dadurch, dass die Anzahl der Simualationen einstellbar ist, ist die Höhe 
+der Spenden in absoluten Zahlen natürlich willkürlich, es lassen sich aber durchaus relative Unterschiede
+und Tendenzen feststellen. 
+
+
+Für Leute, die so ein System aufsetzen und Parametrisieren müssen ist das Projekt natürlich nicht zufrieden
+stellend. Die Schwankungen zwischen verschiedenen Simulationen sind relativ hoch, sodass mehrere Simulationen
+durchgeführt werden müssen um sicher zu stellen, dass die Egebnisse statistisch relevant sind. Damit ist die
+Plattform für Parameter-Finetuning nicht brauchbar. Hier rächt sich die Technologiewahl, da eine Browseranwendung
+prinzipiell weniger Leistungsfähiger als eine native Anwendung ist. Die Verwendung von WebAssembly kann hierbei
+eventuell die Leistung steigern. Trotzdem ist die Webanwendung hilfreich um eine Intuition für die Auswirkungen
+verschiedener Parameter zu erhalten und kann als Basis für eine Weiterentwicklung dienen. 
+Für die Zielgruppe der Leute, die experimentieren wollen ist das Projekt durchaus empfehlenswert. Die graphische
+Anzeige macht es ziemlich leicht die einzelnen Auswikung der Parameter zu erfassen. Hier ist allerdings problematisch,
+dass die Oberfläche nicht besonders schön gestaltet ist. Würde man das Tool veröffentlichen wollen wäre hier definitv
+noch Nachholbedarf. Außerdem fehlt eine Anleitung oder zumindest Tooltips für die Bedienung der Simultation.
+
+Insgesamt aber ist für die aufgewendeten Ressourcen ein durchaus passables Projekt entstanden und ich bin mit
+meiner Leistung weitestgehend zufrieden. Die Nutzung von Svelte war für mich neu, aber es ist unglaublich 
+angenehm zu benutzen gewesen, besonders im Vergleich zu Vanilla Javascript auf das ich zurückgegriffen hätte,
+wenn ich kein klassisches Desktopprogramm schreiben hätte sollen. 

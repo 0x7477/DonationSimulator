@@ -1,48 +1,50 @@
 <script lang="ts">
-	import Axis from './Axis.svelte';
-
-	import { spring } from 'svelte/motion';
-	import { cubicOut } from 'svelte/easing';
-	import { extent } from 'd3-array';
-	import { scaleLinear } from 'd3-scale';
+	import { Scatter } from 'svelte-chartjs';
 	import type { DonatorDataPoint } from '$lib/ts/donator_info';
+	import type { Charity } from '$lib/ts/charity';
+	import {
+		Chart as ChartJS,
+		Title,
+		Tooltip,
+		Legend,
+		LineElement,
+		CategoryScale,
+		LinearScale,
+		PointElement
+	} from 'chart.js';
 
-	// utility function for translating elements
-	const move = (x:number, y:number) => `transform: translate(${x}px, ${y}px`;
+	ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
 
-	export let data:DonatorDataPoint[] = [];
-	export let x_index:number = 0;
-	export let margin = {
-		// typical d3 margin convention
-		top: 40,
-		right: 20,
-		bottom: 20,
-		left: 20
+	export let charities: Charity[];
+
+	export let x_index: number;
+	export let data_points: DonatorDataPoint[][];
+
+	let colors = ['#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'];
+
+	$: x_index, data_points, setData();
+	
+	function setData() {
+		data.datasets = [];
+		for (var c = 0; c < data_points.length; c++) {
+			data.datasets.push({
+				borderColor: colors[c % colors.length],
+				backgroundColor: colors[c % colors.length],
+				label: charities[c].name,
+				data: [{}]
+			});
+
+			for (var i = 0; i < data_points[c].length; i++) {
+				var dp = { x: data_points[c][i].data[x_index], y: data_points[c][i].data[5] };
+				data.datasets[c].data.push(dp);
+			}
+		}
+	}
+
+	let data = {
+		labels: ['Scatter'],
+		datasets: [{}]
 	};
-
-	let width = 300;
-	let height = 400;
-	$: mainWidth = width - margin.right - margin.left;
-	$: mainHeight = height - margin.top - margin.bottom;
-
-	// make me some scales!
-
-	$: xScale = scaleLinear()
-    .domain(extent(data, (d) => d.data[x_index]))
-    .range([0, mainWidth]);
-  $: yScale = scaleLinear()
-    .domain(extent(data, (d) => d.data[5]))
-    .range([mainHeight, 0]);
 </script>
 
-<figure class="c" bind:clientWidth={width}>
-	<svg {width} {height}>
-		<g style={move(margin.top, margin.left)}>
-			<Axis {mainHeight} {margin} scale={yScale} position="left" />
-			{#each data as d}
-			<circle style={move(xScale(d.data[x_index]), yScale((d.data[5])))} r={3} fill={"tomato"} />
-			{/each}
-			<Axis {mainHeight} {margin} scale={xScale} position="bottom" />
-		</g>
-	</svg>
-</figure>
+<Scatter {data} options={{ responsive: true }} />

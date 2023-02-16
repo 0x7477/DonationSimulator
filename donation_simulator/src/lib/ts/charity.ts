@@ -8,7 +8,6 @@ export class Charity
     public topic: number,
 
     public uses_downline_distribution: boolean,
-    public uses_emotional_presents: boolean,
     public uses_monetary_presents: boolean,
 
     public downline_distribution_share: number,
