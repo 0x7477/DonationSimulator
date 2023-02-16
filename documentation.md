@@ -198,11 +198,10 @@ besonders starken Aussagewert. Jeder einzelne Teilschritt im Modell ist eine eig
 und lässt sich wahrscheinlich besser mit Machine-Learning Allgorithmen ausführen, als mit diskreten
 Formeln, da die Reduktion von Menschlichem Verhalten auf 5 Parameter etwas Unerkomplex ist. Parameter
 wie Geschlecht, Alter, soziales Umfeld, Bildungsstand, Religion etc. werden nicht berücksichtigt 
-obwohl sie sehr großen Einfluss auf das Spendeverhalten besitzen. Auch die Höhe der Spenden ist 
-nicht wirklich repräsentativ. Dadurch, dass die Anzahl der Simualationen einstellbar ist, ist die Höhe 
-der Spenden in absoluten Zahlen natürlich willkürlich, es lassen sich aber durchaus relative Unterschiede
-und Tendenzen feststellen. 
-
+obwohl sie sehr großen Einfluss auf das Spendeverhalten besitzen. Und auch die Quellen für das 
+Popularitätmodell sind höchst fragwürdig. Auch die Höhe der Spenden ist nicht wirklich repräsentativ. 
+Dadurch, dass die Anzahl der Simualationen einstellbar ist, ist die Höhe der Spenden in absoluten 
+Zahlen natürlich willkürlich, es lassen sich aber durchaus relative Unterschiede und Tendenzen feststellen. 
 
 Für Leute, die so ein System aufsetzen und Parametrisieren müssen ist das Projekt natürlich nicht zufrieden
 stellend. Die Schwankungen zwischen verschiedenen Simulationen sind relativ hoch, sodass mehrere Simulationen
@@ -216,7 +215,10 @@ Anzeige macht es ziemlich leicht die einzelnen Auswikung der Parameter zu erfass
 dass die Oberfläche nicht besonders schön gestaltet ist. Würde man das Tool veröffentlichen wollen wäre hier definitv
 noch Nachholbedarf. Außerdem fehlt eine Anleitung oder zumindest Tooltips für die Bedienung der Simultation.
 
-Insgesamt aber ist für die aufgewendeten Ressourcen ein durchaus passables Projekt entstanden und ich bin mit
-meiner Leistung weitestgehend zufrieden. Die Nutzung von Svelte war für mich neu, aber es ist unglaublich 
+Die Nutzung von Svelte war für mich neu, aber es ist unglaublich 
 angenehm zu benutzen gewesen, besonders im Vergleich zu Vanilla Javascript auf das ich zurückgegriffen hätte,
 wenn ich kein klassisches Desktopprogramm schreiben hätte sollen. 
+
+Insgesamt aber ist für die aufgewendeten Ressourcen ein durchaus passables Projekt entstanden und ich bin mit
+meiner Leistung weitestgehend zufrieden. Sich in das Thema einzulesen war sehr interessant und ich bin auf
+jeden Fall sicher, dass in diesem Feld noch weiter geforscht werden müsste/sollte.
