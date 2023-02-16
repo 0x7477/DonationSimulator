@@ -30,8 +30,6 @@
 		.x(d => xScale(d.x))
 		.y(d => yScale(-d.y))
 		.curve(curveBasis);
-
-    let center_line = [{x:0   ,y:0.39894228},{x:0   ,y:0}]
         
     $: left = pathLine([{x:6*(percent[0]-0.5)   ,y:1},{x:6*(percent[0]-0.5)   ,y:0}])
     $: right = pathLine([{x:6*(percent[1]-0.5)   ,y:1},{x:6*(percent[1]-0.5)   ,y:0}])
@@ -39,7 +37,6 @@
 
 <svg viewBox="0 -1 100 17">
     <path stroke="purple" d={pathLine(data)} />
-    <path stroke="purple" d={pathLine(center_line)} />
     <path stroke="green" d={left} />
     <path stroke="green" d={right} />
 

@@ -14,8 +14,7 @@ export class Charity
     public downline_distribution_share: number,
     public monetary_present_amount: number,
     public monetary_present_percent: number,
-    public emotional_quality: number,
-    ){}
+    public emotional_quality: number){}
 
     public getMonetaryPresentReturn(investment:number)
     {
@@ -35,9 +34,7 @@ export class Charity
 
     public getMonetaryEmotionalBonus(donator:Donator)
     {
-        if(!this.uses_emotional_presents) return 0;
-
-        return Statistics.cdfNormal(donator.empathy) - Statistics.cdfNormal(this.emotional_quality);        
+        return this.emotional_quality * donator.empathy / 3;        
     }
 };
 

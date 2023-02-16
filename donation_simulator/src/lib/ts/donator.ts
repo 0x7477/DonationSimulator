@@ -17,10 +17,6 @@ export class Donator
     public popularity: number; //the amount of people that know you
     public params: Parameter;
 
-    public getDataPoint(charity:Charity)
-    {
-        return new DonatorDataPoint([this.wealth,this.risk,this.empathy,this.interests,this.popularity,this.getAmountDonated(charity)]);
-    }
     public getWealth()
     {
         return this.wealth;
@@ -55,9 +51,11 @@ export class Donator
 
     private randomPopularity()
     {
-        var x = Math.random();
+        return Donator.calculatePopularity(Math.random());
+    }
 
-
+    static calculatePopularity(x:number)
+    {
         return Math.max(0,-120 / (x-1)-200);
     }
 
@@ -110,7 +108,7 @@ export class Donator
         {
             return false; // doesn't participate in donations at all
         }
-        if(!has_been_informed && charity.popularity >= Math.random())
+        if(!has_been_informed && charity.popularity < Math.random())
         {
             // // console.log("doesn't know the charity");
             return false; //doesn't know the charity
@@ -123,7 +121,7 @@ export class Donator
         }
 
         
-        if(charity.uses_downline_distribution && this.risk < this.params.getMininmalRiskForApprovingDownlineDistribution())
+        if(charity.uses_downline_distribution && charity.downline_distribution_share > 0 && this.risk < this.params.getMininmalRiskForApprovingDownlineDistribution())
         {
             // // console.log("charity is deemed too risky");
             return false;
@@ -162,7 +160,7 @@ export class Donator
         return this.risk / 3;
     }
 
-    private getDonationAmount(charity: Charity)
+    public getDonationAmount(charity: Charity)
     {
         var total_donations =  this.getTotalDonationAmount();
         //now we know how much this person donates yearly
@@ -170,15 +168,15 @@ export class Donator
 
         //if the interest matches completely donate all
         //if the interest matches not too much donate a little
-        var interest_percent = 1 - this.getNormalizedInterestDifference(charity);
+        var interest_percent = Math.max(0,1 - this.getNormalizedInterestDifference(charity)); //not less than 0
         var donation_amount = total_donations * interest_percent;
 
         var potential_return = this.calculatePotentialFinancialCompensation(charity, donation_amount);
 
-        var compensation_percent = potential_return / total_donations;
-
+        var compensation_percent = Math.min(1,potential_return / donation_amount); //not more than 100%
+        if(isNaN(compensation_percent)) compensation_percent= 0;
         //if we are compensated for 0% we don't give additional money
-        //if we are compensated for 10% we give depending on our risk value (normally we give nothing extra, with higher risk we gove more, with less risk we give less)
+        //if we are compensated for 10% we give depending on our risk value (normally we give nothing extra, with higher risk we give more, with less risk we give less)
 
         var additional_donation_percent = compensation_percent * this.getRiskReturnInfluence();
 
@@ -187,43 +185,58 @@ export class Donator
 
         var emotional_bonus = charity.getMonetaryEmotionalBonus(this);
 
-        var total_additional_donation_percent = Math.max(0,additional_donation_percent+emotional_bonus); //not less than 0%
-        return donation_amount * (1 + total_additional_donation_percent);
+        var total_additional_donation_percent = additional_donation_percent+emotional_bonus; 
+        var final_donation = donation_amount * (1 + total_additional_donation_percent);
+
+        var charity_return = charity.getMonetaryPresentReturn(final_donation);
+
+        return final_donation - charity_return;
     }
 
-    public getAmountDonated(charity: Charity, isFollower:boolean = false)
+    public getDataPoints(charity:Charity,isFollower:boolean = false)
     {
-        if(!this.doesDonate(charity)) return 0;
+        if(!this.doesDonate(charity)) return [];
 
         //ok we donate but how much?
-        var own_donation = this.getDonationAmount(charity);
+        var own_donation = this.getDataPoint(charity);
 
-        if(isFollower || !this.doesAdvertiseCharity(charity)) return own_donation;
+        if(isFollower || !this.doesAdvertiseCharity(charity)) return [this.getDataPoint(charity)];
 
-        var external_donations = 0;
+        var donation_data_points:DonatorDataPoint[] = [];// = [own_donation];
         //we are advertising to others our charity
-
 
         for(var i = 0; i < this.popularity * this.params.conversion_rate_estimate; i++)
         {
             var follower = this.generateFollower();
-            external_donations += follower.getAmountDonated(charity, true);
+            var follower_data_point = follower.getDataPoint(charity);
+            donation_data_points.push(follower_data_point);
         }
-
 
         for(var i = 0; i < this.params.average_number_of_friends_one_would_ask_to_donate; i++)
         {
             var friend = this.generateFriend();
-            external_donations += friend.getAmountDonated(charity);
+            var friend_data_point = friend.getDataPoint(charity);
+            donation_data_points.push(friend_data_point);
         }
 
-        return own_donation + external_donations * (1 - charity.downline_distribution_share);
+        for(var i = 0; i < donation_data_points.length; i++)
+            donation_data_points[i].data[5] *= (1 - charity.downline_distribution_share);
+        
+
+        donation_data_points.push(own_donation);
+
+        return donation_data_points;
+        
+    }
+    public getDataPoint(charity:Charity)
+    {
+        return new DonatorDataPoint([this.wealth,this.risk,this.empathy,this.interests,this.popularity,this.getDonationAmount(charity)]);
     }
 
 
     private addSimilarity(base : number, influence: number)
     {
-        return (base + influence)/2;
+        return (base + 3*influence)/4;
     }
 
     public generateFollower()
@@ -258,8 +271,8 @@ export class Donator
     public constructor(params : Parameter) 
     {
         this.params = params;
-        this.wealth = this.randomWealth();
         this.popularity = 1+this.randomPopularity();
+        this.wealth = Math.max(this.popularity/10, this.randomWealth());
         this.risk = Statistics.gaussianRandom();
         this.empathy = Statistics.gaussianRandom();
         this.interests = Statistics.gaussianRandom();

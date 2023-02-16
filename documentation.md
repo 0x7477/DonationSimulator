@@ -42,19 +42,35 @@ Aus Zeitgründen will ich mich ausschließlich mit diesen Beschäftigen.
 
 Um das Modell aufbauen zu können brauchen wir Axiome und Daten. Zum Beispiel hätten wir ein Axiom: "Verschuldete Menschen spenden nicht". Dies ist etwas, was sich nicht unbedingt leicht beweisen lässt, aber im Rahmen der Simulation umgesetzt werden soll. Dieses Axiom mit dem Anteil der Verschuldeten Personen zusammen gibt uns eine qualifizierte Aussage, die wir zur Simulation benutzen können.
 
-Für das Projekt wurden verschiedene Quellen benutzt. Aus diesen Daten werden dann anschließend Modelle aufgebaut:
+Für das Projekt wurden verschiedene Quellen benutzt.
+Aus diesen wurde dann ein lineares Modell erstellt um kontinuierliche Werte bestimmten zu können.
+Folgende Modelle wurden aufgebaut:
 
 ### Die Vermögensverteilung
-Zur Bestimmung wie viel Geld eine zu simulierende Person hat
+Zur Bestimmung wie viel Geld eine zu simulierende Person hat.
+Hierfür wurde nicht das Vermögen, sondern das Einkommen einer Person verwendet.
+Die Idee dahinter ist, dass eine Person hauptsächlich Geldwerte spendet und Vermögen
+meistens nicht in Form von Geld, sondern Sachwerten vorliegt.
+
+Hierfür wurden die Daten von der ![Bundesbank](https://www.bundesbank.de/resource/blob/794130/d523cb34074622e1b4cfa729f12a1276/mL/2019-04-vermoegensbefragung-data.pdfs) verwendet.
+
+
 ### Das Donation Modell
-Ob diese Person überhaupt Geld spendet
+Anschließend brauche ich ein Modell, welches eine Aussage trifft, ob eine Person überhaupt spendet.
+Glücklicherweise hatte das statistische Bundesamt dazu Daten erhoben. ![destatis.de](https://www.destatis.de/DE/Methoden/WISTA-Wirtschaft-und-Statistik/2019/06/spendenbereitschaft-062019.pdf?__blob=publicationFile)
+
 ### Das Donation Share Modell
-Wie viel von dem Geld wird auch gespendet
+Wenn nun feststeht, dass eine Person spendet, ist es interessant zu wissen wie viel diese Person spendet.
+Dafür nutze ich die Daten von der ![Bundesbank](https://www.bundesbank.de/resource/blob/794130/d523cb34074622e1b4cfa729f12a1276/mL/2019-04-vermoegensbefragung-data.pdfs).
 
 ### Das Popularitätsmodell
-Hier wird die Popularität der Menschen geschätzt.
+Um die DownstreamDistribution simulieren zu können brauchte ich anschließend Daten darüber
+wie viele Menschen jeder erreichen kann. Hierfür habe ich Leute in Freunde und Follower eingeteilt.
+Die Anzahl von Freunden ist bei allen Menschen nach ![PhD Robin Dunbar(https://ideas.ted.com/how-many-friends-do-most-people-dunbars-number/)
+bei ungefähr 15. Wir gehen in dieser Modellierung davon aus, dass man Charities eher seinen engeren Freunden empfiehlt als weitgehendne Bekannten.
 
-Dazu habe ich folgende Angaben gefunden:
+Die Reichweite einer Person über social media dagegen ist etwas interessanter. Hierfür habe ich überraschend wenig Daten gefunden. 
+Eckdaten konnte ich aber bei - ![quore](https://www.quora.com/Are-there-any-analyses-of-user-distribution-by-follower-followee-numbers-on-sites-with-follower-graphs) und ![heepsy.com](https://blog.heepsy.com/posts/follower-distribution-on-instagram) finden.
 
 |Follower|Prozent die <= Follower haben
 |-|-|
@@ -73,4 +89,11 @@ Ein Modell dafür wurde mit GeoGebra erstellt:
 Es gibt keine wirkliche Metrik für Risko, daher benutzen wir eine einfach Standardverteilung.
 
 Risikobereitschaft soll ausdrücken wie sehr ein Mensch dau geneigt ist Geld zu spenden, wenn 
-er keine volle Kontrolle darüber hat, wo das Geld landet. Dies schließt die Downline-Distribution, aber auch das
+er keine volle Kontrolle darüber hat, wo das Geld landet. Dies schließt die Downline-Distribution, aber auch 
+monetäre Geschenke ein. 
+
+Allerdings gibt es Leute, die solche Systeme besonders reizvoll finden (z.B. Aktion-Mensch-Lotterie).
+Diese Menschen steigern in diesem Modell deshalb ihre Spendenhöhe.
+
+### Das Empathiemodell
+In dem Modell wurde versucht die Empathie von Menschen einfließen zu lassen.

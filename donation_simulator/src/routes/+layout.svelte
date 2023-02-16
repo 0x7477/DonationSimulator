@@ -1,7 +1,7 @@
 <script>
-	import '../app.postcss';
-	import '../app.postcss';
 	import './styles.css';
+	import '../app.css';
+
 </script>
 
 <div class="app">

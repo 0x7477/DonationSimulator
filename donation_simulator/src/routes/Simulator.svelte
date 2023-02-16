@@ -7,13 +7,54 @@
 	import { Donator } from '$lib/ts/donator';
 	import type { DonatorDataPoint } from '$lib/ts/donator_info';
 	import ScatterPlot from './ScatterPlot.svelte';
-
 	import { Tabs, TabItem } from 'flowbite-svelte';
+
+
+	import { Doughnut } from 'svelte-chartjs';
+
+  import {
+    Chart as ChartJS,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement,
+    CategoryScale,
+  } from 'chart.js';
+
+  ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
+
+  let charity_funding_graph_data = {
+  labels: [""],
+  datasets: [
+    {
+      data: [0],
+      backgroundColor: ['#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
+      hoverBackgroundColor: [
+        '#FF5A5E',
+        '#5AD3D1',
+        '#FFC870',
+        '#A8B3C5',
+        '#616774',
+      ],
+    },
+	{
+      data: [0],
+      backgroundColor: ['#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
+      hoverBackgroundColor: [
+        '#FF5A5E',
+        '#5AD3D1',
+        '#FFC870',
+        '#A8B3C5',
+        '#616774',
+      ],
+    }
+  ],
+};
 
 	let params = new Parameter();
 
 	let charities:Charity[] = [];
-	let data:DonatorDataPoint[][] = [];
+	let charity_funding_data:DonatorDataPoint[][] = [];
 	let amount_of_charities:number = 0;
 
 	let x_index:number;
@@ -36,29 +77,39 @@
 
 	function simulate()
 	{
-		data = [];
+		charity_funding_data = [];
+		charity_funding_graph_data.datasets[0].data = [];
+		charity_funding_graph_data.datasets[1].data = [];
+		charity_funding_graph_data.labels = [];
+
 		for(var c = 0; c < charities.length; c++)
 		{
-			data.push([]);
-			charities[c].total_donations = 0;
+			charity_funding_data.push([]);
+			charity_funding_graph_data.datasets[0].data.push(0);
+			charity_funding_graph_data.datasets[1].data.push(0);
+			charity_funding_graph_data.labels.push(charities[c].name);
 
 			for(var i = 0; i < params.number_of_simulations; i++)
 			{
 				let donator = new Donator(params);
-				var dp = donator.getDataPoint(charities[c]);
-				if(dp.data[5] == 0) continue;
+				var dp = donator.getDataPoints(charities[c]);
+				if(dp.length == 0) continue;
 
-				charities[c].total_donations += dp.data[5];
-				data[c].push(dp);
+				for(var j = 0; j < dp.length; j++)
+				{
+				    charity_funding_graph_data.datasets[0].data[c] += dp[j].data[5];
+				    charity_funding_graph_data.datasets[1].data[c] += Math.sqrt(dp[j].data[5]);
 
-				// if(dp.data[0] < dp.data[5])
-				// 	console.log(donator,dp.data[5]);
+				}
+				
+				charity_funding_data[c] = charity_funding_data[c].concat(dp);
 			}
 
-			console.log(charities[c].name, charities[c].total_donations,charities[c].total_donations / params.number_of_simulations);
-		}
+			charity_funding_graph_data.datasets[1].data[c] *= charity_funding_graph_data.datasets[1].data[c];
 
-		data= data;
+		}
+		charity_funding_graph_data = charity_funding_graph_data;
+		charity_funding_data= charity_funding_data;
 	}
 
 	let shown_charity = 0;
@@ -92,6 +143,9 @@
 		<input type="button" on:click={removeCharity} value="remove charity">
 
 	</div>
+	<hr>
+
+	{#if charity_funding_graph_data.labels[0] != ""}
 	<div id="plot">
 
 	<select bind:value={shown_charity}>
@@ -108,8 +162,22 @@
 		<option value="4">popularity</option>
 	</select>
 
-	<ScatterPlot {x_index} data={data[shown_charity]}/>
+	<ScatterPlot {x_index} data={charity_funding_data[shown_charity]}/>
 	</div>
+
+	{(console.log(charity_funding_graph_data.labels[0]),"")}
+		
+	<div id="funding_plots">
+		<div>
+			<h3>Donation Plot</h3><br>
+			<span><bold>Outer Circle:</bold> Donation Share</span><br>
+			<span><bold>Inner Circle:</bold> Donation Share after Quadratic Funding</span><br>
+		</div>
+		<Doughnut data={charity_funding_graph_data} options={{ responsive: true }} />
+	</div>
+	{/if}
+
+
 </div>
 
 <style>
@@ -135,6 +203,12 @@
 	{
 		margin: 0 1em 0 1em;
 	}
+
+	#funding_plots
+	{
+		height: 300px;
+display: flex;
+justify-content: center;	}
 
 
 </style>

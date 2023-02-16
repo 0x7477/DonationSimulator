@@ -1,3 +1,42 @@
-h3 {
+h3,h2,h1 {
     margin: 0;
 }
+
+input[type=button], select, button
+{
+    width: 130px;
+}
+
+
+html
+{
+    background-color: #253545;
+    color: #fff;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+#charity_params
+{
+    margin: 0 !important;
+    padding: 0;
+}
+#charity_params li
+{
+    text-decoration: none;
+    display: block;
+}
+
+#charity_params ul
+{   
+    display: flex;
+    padding: 0;
+}
+
+.active
+{
+    background-color: #0061c2;
+    border-color: #0061c2;
+    border-radius: 5px;
+
+}
+

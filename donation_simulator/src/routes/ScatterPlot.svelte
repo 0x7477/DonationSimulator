@@ -4,8 +4,7 @@
 	import { spring } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import { extent } from 'd3-array';
-	import { interpolateHcl } from 'd3-interpolate';
-	import { scaleSqrt, scaleLinear } from 'd3-scale';
+	import { scaleLinear } from 'd3-scale';
 	import type { DonatorDataPoint } from '$lib/ts/donator_info';
 
 	// utility function for translating elements

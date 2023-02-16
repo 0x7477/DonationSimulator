@@ -1,6 +1,6 @@
 <script>
-    import { select, selectAll } from "d3-selection";
-    import { axisBottom,axisTop, axisLeft } from "d3-axis";
+    import { select } from "d3-selection";
+    import { axisBottom, axisLeft } from "d3-axis";
     export let mainHeight;
     export let margin;
     export let position;

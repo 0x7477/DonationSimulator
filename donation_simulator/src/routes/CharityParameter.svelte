@@ -20,9 +20,9 @@
 
     $: charity.topic = 6*(topic_0_to_1-0.5);
 
-    $: if(charity.uses_downline_distribution) charity.downline_distribution_share = 0;
-    $: if(charity.uses_emotional_presents) charity.emotional_quality = 0;
-    $: if(charity.uses_monetary_presents) {charity.monetary_present_amount = 0;charity.monetary_present_percent = 0;}
+    $: if(!charity.uses_downline_distribution) charity.downline_distribution_share = 0;
+    $: if(!charity.uses_emotional_presents) charity.emotional_quality = 0;
+    $: if(!charity.uses_monetary_presents) {charity.monetary_present_amount = 0;charity.monetary_present_percent = 0;}
 
 </script>
 

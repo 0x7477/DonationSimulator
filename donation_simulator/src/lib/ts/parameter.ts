@@ -29,6 +29,7 @@ export class Parameter
     public percent_of_interesting_charities : number = 0.7,
     public percent_of_people_advertising_after_donation : number = 0.02,
     public conversion_rate_estimate:number = 0.02,
+    public number_of_simulations:number = 10000,
     public average_number_of_friends_one_would_ask_to_donate:number = 15
     )
     {

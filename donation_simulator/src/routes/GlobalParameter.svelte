@@ -44,6 +44,20 @@
     </div>
 
 
+    <div class="setting">
+        <label for="slider">Amount of simulations: {params.number_of_simulations}</label>
+        <input
+            type="range"
+            min={100}
+            max={100000}
+            step={1}
+            id="slider"
+            bind:value={params.number_of_simulations}
+        />
+    </div>
+
+
+
 </div>
 
 
