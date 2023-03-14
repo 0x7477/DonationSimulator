@@ -10,7 +10,7 @@
 	export let charity:Charity;
 	export let params:Parameter;
 
-    let topic_0_to_1: number = 0.5;
+    let topic_0_to_1: number = charity.topic/6 + 0.5;
 
     $: max_distance = params.calcMaxInterestDistance(params.percent_of_interesting_charities)
 

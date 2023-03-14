@@ -185,7 +185,6 @@ zu erkennen.
 
 Aus den Simulationen lassen sich folgende Ergebnisse ziehen:
 - Quadratic Funding benachteiligt unbekanntere Charities
-- Quadratic Funding benachteiligt Charities, die wenig Leute kennen
 - Der Einsatz von monetären Geschenken hat kaum einen Einfluss auf die Spendenhöhe
 - Downline Distribution erhöht die Spendenbereitschaft, verringert aber die Anzahl der Spender
 
