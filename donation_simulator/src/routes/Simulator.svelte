@@ -37,7 +37,7 @@
 	let charity_funding_data: DonatorDataPoint[][] = [];
 	let amount_of_charities: number = 0;
 
-	let x_index: number;
+	let x_index: number = 0;
 
 	addCharity();
 
@@ -120,11 +120,11 @@
 	{#if charity_funding_graph_data.labels[0] != ''}
 		<div id="plot">
 			<select id="title" name="title" bind:value={x_index}>
-				<option value="0" selected>wealth</option>
-				<option value="1">risk</option>
-				<option value="2">empathy</option>
-				<option value="3">interests</option>
-				<option value="4">popularity</option>
+				<option value={0}>wealth</option>
+				<option value={1}>risk</option>
+				<option value={2}>empathy</option>
+				<option value={3}>interests</option>
+				<option value={4}>popularity</option>
 			</select>
 
 			<ScatterPlot {x_index} data_points={charity_funding_data} {charities} />

@@ -24,7 +24,8 @@
 
 	$: x_index, data_points, setData();
 	
-	function setData() {
+	function setData() 
+	{
 		data.datasets = [];
 		for (var c = 0; c < data_points.length; c++) {
 			data.datasets.push({
@@ -41,10 +42,28 @@
 		}
 	}
 
-	let data = {
+	let descriptions = ["wealth", "risk", "empathy", "interests", "popularity"];
+	$: options = {
+		responsive: true ,
+  scales: {
+    y: {
+		title: {
+			text: "amount donated",
+			display: true
+		}
+  },
+  x: {
+		title: {
+			text: descriptions[x_index],
+			display: true
+		}
+  }    
+}}
+
+	$: data = {
 		labels: ['Scatter'],
 		datasets: [{}]
 	};
 </script>
 
-<Scatter {data} options={{ responsive: true }} />
+<Scatter {data} {options} />
