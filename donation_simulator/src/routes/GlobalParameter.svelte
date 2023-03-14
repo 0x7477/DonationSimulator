@@ -27,7 +27,7 @@
     />
 
     <PercentSlider
-    label_text="Percent of follower each person can recruit"
+    label_text="Percent of follower each person can recruit (conversion rate)"
     bind:param={params.conversion_rate_estimate}
     />
 
